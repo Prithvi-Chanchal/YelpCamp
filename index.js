@@ -28,9 +28,15 @@ const User = require('./models/user');
 const ExpressError = require('./utils/ExpressError');
 
 const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/yelp-camp';
+const port = process.env.PORT || 3000;
 
 mongoose.connect(dbUrl)
-    .then(() => console.log('mongodb connected'))
+    .then(() => {
+        app.listen(port, () => {
+            console.log('listening');
+        });
+        console.log('mongodb connected');
+    })
     .catch(err => console.log("Error connecting!!!!!\n", err));
 
 
@@ -146,7 +152,3 @@ app.use((err, req, res, next) => {
     const {statusCode = 500, message = 'Something went wrong'} = err;
     res.status(statusCode).render('error', { err });
 })
-
-app.listen(3000, () => {
-    console.log('listening on port 3000');
-});
